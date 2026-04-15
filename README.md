@@ -1,5 +1,3 @@
-# AcroHint: Acronym Highlighter for Academic Papers
-
 <div align="center">
   <img src="icons/icon.png" alt="AcroHint Logo" width="120" />
   <h1>AcroHint: Acronym Highlighter for Academic Papers</h1>
