@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Acronym PDF Viewer</title>
+  <style>
+    body { background-color: #525659; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+    
+    /* 页面容器：相对定位，用于叠加 Canvas 和 TextLayer */
+    .page-container {
+      position: relative;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      background-color: white;
+    }
+    
+    /* Text Layer 必须绝对定位在 Canvas 上方 */
+    .textLayer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+      opacity: 0.; /* 调试时可设为 0.5 看清文字层，生产环境设为 0（透明但可选中）或者保持默认 */
+      line-height: 1;
+    }
+
+    /* 保护 PDF.js 默认的 span 样式不被破坏 */
+    .textLayer span {
+      color: transparent;
+      position: absolute;
+      white-space: pre;
+      cursor: text;
+      transform-origin: 0% 0%;
+    }
+
+    /* 我们的高亮样式 */
+    .pdf-acronym-hl {
+      border-bottom: 2px dashed #4285F4;
+      background-color: rgba(66, 133, 244, 0.1);
+      color: transparent; /* 保持透明，不遮挡底层 Canvas 的黑色字体 */
+      cursor: help;
+      pointer-events: auto; /* 确保 hover 能触发 */
+    }
+  </style>
+</head>
+<body>
+  <div id="viewer"></div>
+
+  <script src="pdf.js"></script>
+  <script src="viewer.js"></script>
+</body>
+</html>

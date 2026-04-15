@@ -1,0 +1,100 @@
+/* ═══════════════════════════════════════════════════════════════
+   Acronym Highlighter for arXiv — styles.css
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Highlighted acronym span ─────────────────────────────────── */
+.paper-acronym-highlight {
+  border-bottom: 1.5px dashed #4285F4;
+  cursor: help;
+  color: inherit;
+  /* Subtle blue tint on the text to make it easier to spot */
+  text-decoration: none;
+  position: relative;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.paper-acronym-highlight:hover {
+  border-bottom-color: #1a73e8;
+  background-color: rgba(66, 133, 244, 0.08);
+  border-radius: 2px;
+}
+
+/* ── Global tooltip ───────────────────────────────────────────── */
+#paper-acronym-tooltip {
+  /* Positioning */
+  position: absolute;
+  z-index: 2147483647; /* Maximum z-index */
+  display: none;
+  pointer-events: none;
+
+  /* Box */
+  max-width: 360px;
+  padding: 7px 12px;
+  border-radius: 8px;
+
+  /* Colors — dark, high-contrast, editor-style */
+  background: #1e2330;
+  color: #e8eaf0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  /* Shadow */
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.35),
+    0 1px 4px  rgba(0, 0, 0, 0.25);
+
+  /* Typography */
+  font-family: -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+
+  /* Animate in */
+  animation: acronym-tip-in 0.12s ease both;
+}
+
+@keyframes acronym-tip-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Small arrow / caret pointing downward */
+#paper-acronym-tooltip::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left:  6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top:   6px solid #1e2330;
+  pointer-events: none;
+}
+
+/* Inner typography pieces */
+#paper-acronym-tooltip .tip-acronym {
+  font-weight: 700;
+  color: #81b4ff;      /* soft blue — easy on dark bg */
+  margin-right: 2px;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+
+#paper-acronym-tooltip .tip-sep {
+  color: #555e7a;
+  margin: 0 5px;
+  font-size: 11px;
+  vertical-align: middle;
+}
+
+#paper-acronym-tooltip .tip-full {
+  color: #c9d1e0;
+  font-size: 13px;
+}

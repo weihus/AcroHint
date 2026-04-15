@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Acronym Highlighter — Demo</title>
+<style>
+  /* ── Page chrome ─────────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #f7f8fc;
+    font-family: "Georgia", "Times New Roman", serif;
+    color: #1a1a2e;
+    padding: 40px 20px 80px;
+  }
+
+  .page-wrap {
+    max-width: 780px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 24px rgba(0,0,0,.08);
+    padding: 52px 64px;
+  }
+
+  .badge {
+    display: inline-block;
+    background: #4285F4;
+    color: #fff;
+    font-family: system-ui, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 8px;
+    color: #0d1117;
+  }
+
+  .meta {
+    font-family: system-ui, sans-serif;
+    font-size: 13px;
+    color: #6e7787;
+    margin-bottom: 36px;
+    border-bottom: 1px solid #eef0f5;
+    padding-bottom: 20px;
+  }
+
+  h2 {
+    font-size: 17px;
+    font-weight: 700;
+    margin: 32px 0 10px;
+    color: #1a1a2e;
+  }
+
+  p {
+    font-size: 16px;
+    line-height: 1.85;
+    color: #2c3040;
+    margin-bottom: 16px;
+  }
+
+  /* ── Extension styles (copied from styles.css) ─────────────────── */
+  .paper-acronym-highlight {
+    border-bottom: 1.5px dashed #4285F4;
+    cursor: help;
+    color: inherit;
+    text-decoration: none;
+    position: relative;
+    transition: border-color .15s ease, background-color .15s ease;
+  }
+  .paper-acronym-highlight:hover {
+    border-bottom-color: #1a73e8;
+    background-color: rgba(66,133,244,.08);
+    border-radius: 2px;
+  }
+
+  #paper-acronym-tooltip {
+    position: absolute;
+    z-index: 2147483647;
+    display: none;
+    pointer-events: none;
+    max-width: 360px;
+    padding: 7px 12px;
+    border-radius: 8px;
+    background: #1e2330;
+    color: #e8eaf0;
+    border: 1px solid rgba(255,255,255,.08);
+    box-shadow: 0 4px 16px rgba(0,0,0,.35), 0 1px 4px rgba(0,0,0,.25);
+    font-family: -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    letter-spacing: .01em;
+    animation: acronym-tip-in .12s ease both;
+  }
+  @keyframes acronym-tip-in {
+    from { opacity:0; transform:translateY(4px); }
+    to   { opacity:1; transform:translateY(0);   }
+  }
+  #paper-acronym-tooltip::after {
+    content:"";
+    position:absolute;
+    left:50%; bottom:-6px;
+    transform:translateX(-50%);
+    width:0; height:0;
+    border-left:6px solid transparent;
+    border-right:6px solid transparent;
+    border-top:6px solid #1e2330;
+    pointer-events:none;
+  }
+  #paper-acronym-tooltip .tip-acronym { font-weight:700; color:#81b4ff; margin-right:2px; font-size:13px; letter-spacing:.04em; }
+  #paper-acronym-tooltip .tip-sep     { color:#555e7a; margin:0 5px; font-size:11px; vertical-align:middle; }
+  #paper-acronym-tooltip .tip-full    { color:#c9d1e0; font-size:13px; }
+</style>
+</head>
+<body>
+
+<div class="page-wrap">
+  <div class="badge">Extension Demo</div>
+  <h1>Attention Is All You Need</h1>
+  <div class="meta">
+    Vaswani et al. · NeurIPS 2017 · <em>(Simulated arXiv paper for demo purposes)</em>
+  </div>
+
+  <h2>Abstract</h2>
+  <p>
+    The dominant sequence transduction models are based on complex recurrent or
+    convolutional neural networks that include an encoder and a decoder.
+    The best performing models also connect the encoder and decoder through an
+    attention mechanism. We propose a new simple network architecture, the
+    Transformer, based solely on attention mechanisms, dispensing with recurrence
+    and convolutions entirely. Experiments on two machine translation (MT) tasks
+    show these models to be superior in quality while being more parallelizable
+    and requiring significantly less time to train.
+  </p>
+
+  <h2>1. Introduction</h2>
+  <p>
+    Recurrent neural networks (RNN), and in particular long short-term memory
+    (LSTM) and gated recurrent unit (GRU) networks, have been firmly established
+    as state-of-the-art approaches in sequence modeling and transduction
+    problems such as language modeling and machine translation.
+    Numerous efforts have since continued to push the boundaries of recurrent
+    language models (RLM) and encoder-decoder architectures.
+  </p>
+  <p>
+    Attention mechanisms have become an integral part of compelling sequence
+    modeling and transduction models. The self-attention mechanism (SAM) allows
+    the model to draw global dependencies between input and output.
+    In this work we use multi-head attention (MHA) to jointly attend to
+    information from different representation subspaces at different positions.
+  </p>
+
+  <h2>2. Background</h2>
+  <p>
+    The goal of reducing sequential computation also forms the foundation of
+    the Extended Neural GPU (ENGPU), ByteNet, and ConvS2S, all of which use
+    convolutional neural networks (CNN) as basic building block, computing
+    hidden representations in parallel for all input and output positions.
+    In these models, the number of operations required to relate signals from
+    two arbitrary input or output positions grows in the distance between
+    positions, linearly for ConvS2S and logarithmically for ByteNet.
+    This makes it more difficult to learn dependencies between distant positions.
+  </p>
+  <p>
+    In the Transformer, the RNN and CNN computations are replaced entirely by
+    self-attention. Each layer of MHA applies dot-product attention (DPA)
+    scaled by the square root of the key dimension. The attention weight
+    matrix is computed via a softmax over scaled dot-product attention (DPA)
+    scores, which are then used to produce a weighted sum over value vectors.
+  </p>
+
+  <h2>3. Model Architecture</h2>
+  <p>
+    Most competitive neural sequence transduction models have an encoder-decoder
+    structure. The encoder maps an input sequence of symbol representations to a
+    sequence of continuous representations. Given these, the decoder then
+    generates an output sequence of symbols one element at a time.
+    The Transformer follows this overall architecture using stacked self-attention
+    and point-wise, fully connected layers for both the encoder and decoder.
+    Positional encoding (PE) is added to give the model information about the
+    relative or absolute position of tokens.
+  </p>
+  <p>
+    We also employ residual connections (RC) around each of the two sub-layers,
+    followed by layer normalization (LN). That is, the output of each sub-layer is
+    LN(x + Sublayer(x)), where RC and LN are applied before the sub-layer input.
+    To facilitate these RC, all sub-layers in the model, as well as the
+    embedding layers, produce outputs of dimension d_model = 512.
+  </p>
+</div>
+
+<!-- ── Inline content.js logic (standalone demo) ─────────────── -->
+<script>
+(() => {
+  "use strict";
+
+  const HIGHLIGHT_CLASS = "paper-acronym-highlight";
+  const TOOLTIP_ID      = "paper-acronym-tooltip";
+  const DEFINITION_RE   = /\b((?:[A-Za-z][\w-]*(?:\s+[\w-]+){0,8}))\s+\(([A-Z][A-Z0-9]{1,7})\)/g;
+  const SKIP_TAGS = new Set(["SCRIPT","STYLE","NOSCRIPT","TEXTAREA","CODE","PRE","KBD","SAMP","VAR","MATH","SVG","HEAD","TITLE"]);
+
+  function extractAcronyms() {
+    const map = new Map();
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        const p = node.parentElement;
+        if (!p || SKIP_TAGS.has(p.tagName)) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    let node;
+    while ((node = walker.nextNode())) {
+      let m; DEFINITION_RE.lastIndex = 0;
+      while ((m = DEFINITION_RE.exec(node.nodeValue)) !== null)
+        if (!map.has(m[2])) map.set(m[2], m[1].trim());
+    }
+    return map;
+  }
+
+  function buildRe(map) {
+    const keys = [...map.keys()].sort((a,b)=>b.length-a.length);
+    return new RegExp(`\\b(${keys.map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|")})\\b`,"g");
+  }
+
+  function highlightTextNode(node, re, map) {
+    const text = node.nodeValue;
+    const frags = [];
+    let last = 0;
+    re.lastIndex = 0;
+    let m;
+    while ((m = re.exec(text)) !== null) {
+      if (m.index > last) frags.push(document.createTextNode(text.slice(last, m.index)));
+      const span = document.createElement("span");
+      span.className = HIGHLIGHT_CLASS;
+      span.textContent = m[1];
+      span.dataset.fullName = map.get(m[1]);
+      frags.push(span);
+      last = m.index + m[0].length;
+    }
+    if (!frags.length) return null;
+    if (last < text.length) frags.push(document.createTextNode(text.slice(last)));
+    return frags;
+  }
+
+  function injectHighlights(map) {
+    if (!map.size) return;
+    const re = buildRe(map);
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        const p = node.parentElement;
+        if (!p || SKIP_TAGS.has(p.tagName)) return NodeFilter.FILTER_REJECT;
+        if (p.classList && p.classList.contains(HIGHLIGHT_CLASS)) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    const nodes = [];
+    let n; while ((n = walker.nextNode())) nodes.push(n);
+    for (const tn of nodes) {
+      const reps = highlightTextNode(tn, re, map);
+      if (!reps) continue;
+      const frag = document.createDocumentFragment();
+      reps.forEach(r => frag.appendChild(r));
+      tn.parentNode && tn.parentNode.replaceChild(frag, tn);
+    }
+  }
+
+  function setupTooltip() {
+    const tip = document.createElement("div");
+    tip.id = TOOLTIP_ID;
+    tip.setAttribute("role","tooltip");
+    tip.setAttribute("aria-hidden","true");
+    document.body.appendChild(tip);
+
+    let timer = null;
+
+    document.body.addEventListener("mouseenter", e => {
+      if (!e.target.classList || !e.target.classList.contains(HIGHLIGHT_CLASS)) return;
+      clearTimeout(timer);
+      const { acronym, fullName } = { acronym: e.target.textContent, fullName: e.target.dataset.fullName || "" };
+      timer = setTimeout(() => {
+        tip.innerHTML = `<span class="tip-acronym">${acronym}</span><span class="tip-sep">→</span><span class="tip-full">${fullName}</span>`;
+        tip.style.display = "block";
+        tip.removeAttribute("aria-hidden");
+        // Position
+        tip.style.visibility = "hidden";
+        const tw = tip.offsetWidth, th = tip.offsetHeight;
+        const rect = e.target.getBoundingClientRect();
+        const cx = rect.left + rect.width/2, cy = rect.top;
+        const MARGIN = 12, vw = window.innerWidth;
+        let left = cx - tw/2, top = cy - th - MARGIN;
+        if (left < MARGIN) left = MARGIN;
+        if (left + tw > vw - MARGIN) left = vw - tw - MARGIN;
+        if (top < MARGIN) top = cy + MARGIN;
+        tip.style.left = `${left + window.scrollX}px`;
+        tip.style.top  = `${top  + window.scrollY}px`;
+        tip.style.visibility = "visible";
+      }, 300);
+    }, true);
+
+    document.body.addEventListener("mouseleave", e => {
+      if (!e.target.classList || !e.target.classList.contains(HIGHLIGHT_CLASS)) return;
+      clearTimeout(timer);
+      tip.style.display = "none";
+      tip.setAttribute("aria-hidden","true");
+    }, true);
+
+    window.addEventListener("scroll", () => { clearTimeout(timer); tip.style.display = "none"; }, { passive: true });
+  }
+
+  function run() {
+    const map = extractAcronyms();
+    if (!map.size) return;
+    injectHighlights(map);
+    setupTooltip();
+    console.debug("[Acronym Highlighter] Map:", Object.fromEntries(map));
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", run);
+  else run();
+})();
+</script>
+</body>
+</html>
